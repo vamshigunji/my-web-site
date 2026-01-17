@@ -5,44 +5,43 @@ import { useRef } from "react";
 import Image from "next/image";
 import { Company } from "@/lib/types";
 import { CompanyCard } from "./CompanyCard";
-import { Search, Building2, Wifi, Briefcase, HeartPulse } from "lucide-react";
 
 // Data Configuration
 const COMPANIES: Company[] = [
     {
         name: "Google",
-        logo: Search,
+        logo: "/assets/logos/google.png",
         color: "#4285F4",
         angle: -45, // Top Right
-        distance: 280,
+        distance: 400, // Increased distance for larger circle
     },
     {
         name: "Meta",
-        logo: Briefcase, // Generic for now, or specific if Lucide has it
+        logo: "/assets/logos/meta.png",
         color: "#0668E1",
         angle: 0, // Right
-        distance: 300,
+        distance: 420,
     },
     {
         name: "Comcast",
-        logo: Wifi,
+        logo: "/assets/logos/comcast.png",
         color: "#FFcc00", // Adjusted for visibility
         angle: 45, // Bottom Right
-        distance: 280,
+        distance: 400,
     },
     {
         name: "Workday",
-        logo: Building2,
+        logo: "/assets/logos/workday.png",
         color: "#CF3721",
         angle: 135, // Bottom Left
-        distance: 280,
+        distance: 400,
     },
     {
         name: "CVS",
-        logo: HeartPulse,
+        logo: "/assets/logos/cvs.png",
         color: "#CC0033",
         angle: 225, // Top Left
-        distance: 280,
+        distance: 400,
     },
 ];
 
@@ -67,13 +66,13 @@ export function HeroSequence() {
     // Normalize this range to 0->1 for easier math
     const fanProgress = useTransform(smoothProgress, [0.05, 0.35], [0, 1]);
 
-    // Portrait Scale (Optional: shrinks slightly as cards emerge)
-    const portraitScale = useTransform(smoothProgress, [0.05, 0.35], [1, 0.9]);
+    // Portrait Scale - subtle shrink
+    const portraitScale = useTransform(smoothProgress, [0.05, 0.35], [1, 0.95]);
 
     // Name/About Visibility check
-    // Should fade out if scroll gets too deep, but for now stay visible
-    // Maybe fade slightly so cards pop?
-    const headerOpacity = useTransform(smoothProgress, [0, 0.1, 0.8, 1], [1, 1, 0.5, 0]);
+    // Shift it UP slightly as we scroll to give more room, and fade it out later
+    const headerY = useTransform(smoothProgress, [0, 0.2], [0, -50]);
+    const headerOpacity = useTransform(smoothProgress, [0, 0.1, 0.4, 0.6], [1, 1, 0.8, 0]);
 
     return (
         <div ref={containerRef} className="h-[300vh] relative">
@@ -89,25 +88,25 @@ export function HeroSequence() {
                     style={{ scale: portraitScale, zIndex: 30 }}
                     className="relative flex flex-col items-center"
                 >
-                    {/* Header - Stays accessible */}
+                    {/* Header - Stays accessible, moves up slightly */}
                     <motion.div
-                        style={{ opacity: headerOpacity }}
-                        className="absolute -top-32 w-max text-center"
+                        style={{ opacity: headerOpacity, y: headerY }}
+                        className="absolute -top-48 w-max text-center pointer-events-none"
                     >
-                        <h1 className="text-4xl md:text-5xl font-bold font-outfit text-zinc-100 tracking-tight">
+                        <h1 className="text-5xl md:text-7xl font-bold font-outfit text-zinc-100 tracking-tight">
                             Venkata Gunji
                         </h1>
-                        <p className="mt-2 text-lg font-work-sans text-brand-cyan/80">
+                        <p className="mt-4 text-xl md:text-2xl font-work-sans text-brand-cyan/80 font-light tracking-wide">
                             Data Scientist & Developer
                         </p>
                     </motion.div>
 
-                    {/* Portrait Frame */}
-                    <div className="relative h-48 w-48 md:h-64 md:w-64 rounded-full border border-white/10 glass-panel p-2 shadow-2xl shadow-cyan-500/10">
+                    {/* Portrait Frame - ENLARGED 100% (from w-48 to w-96) */}
+                    <div className="relative h-96 w-96 rounded-full border border-white/10 glass-panel p-3 shadow-2xl shadow-cyan-500/10">
                         <div className="relative h-full w-full overflow-hidden rounded-full bg-zinc-900/50">
                             {/* Fallback avatar if image fails or loading */}
                             <div className="absolute inset-0 flex items-center justify-center text-zinc-700">
-                                <span className="text-4xl">VG</span>
+                                <span className="text-6xl">VG</span>
                             </div>
                             <Image
                                 src="/assets/cover_page_image.png"

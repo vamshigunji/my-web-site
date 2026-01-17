@@ -12,7 +12,10 @@ interface CompanyCardProps {
 
 export function CompanyCard({ company, style }: CompanyCardProps) {
     const Icon = company.logo as LucideIcon;
-    const isComponent = typeof company.logo !== "string";
+    // The original `isComponent` logic was `typeof company.logo !== "string"`.
+    // This means if it's NOT a string (i.e., a component), render the Icon.
+    // If it IS a string, render the image.
+    // We can directly use `typeof company.logo === "string"` for the image path.
 
     return (
         <motion.div
@@ -25,10 +28,17 @@ export function CompanyCard({ company, style }: CompanyCardProps) {
             )}
         >
             <div className="flex flex-col items-center gap-2 text-center">
-                {isComponent ? (
+                {typeof company.logo !== "string" ? ( // If company.logo is a component (not a string)
                     <Icon className="h-8 w-8 text-zinc-100" style={{ color: company.color }} />
-                ) : (
-                    <img src={company.logo as string} alt={company.name} className="h-8 w-8 object-contain" />
+                ) : ( // If company.logo is a string (URL)
+                    <div className="relative h-8 w-8">
+                        <img
+                            src={company.logo as string}
+                            alt={company.name}
+                            className="h-full w-full object-contain brightness-0 invert"
+                            style={{ filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.5))' }}
+                        />
+                    </div>
                 )}
                 <span className="font-work-sans text-[10px] font-medium tracking-wide text-zinc-400">
                     {company.name}
