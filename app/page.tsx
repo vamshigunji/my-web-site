@@ -1,14 +1,16 @@
 import { HeroSequence } from "@/components/HeroSequence";
+import { SkillSection } from "@/components/SkillSection";
+import { ExperienceSection } from "@/components/ExperienceSection";
+import { ProjectSection } from "@/components/ProjectSection";
+import { EXPERIENCE, PROJECTS } from "@/lib/data";
 
 export default function Home() {
   return (
-    <main className="bg-[#0a0a0a]">
+    <main>
       <HeroSequence />
-
-      {/* Spacer for future content */}
-      <div className="h-screen w-full flex items-center justify-center text-zinc-800">
-        <p>Portfolio Content Below</p>
-      </div>
+      <SkillSection />
+      <ExperienceSection experiences={EXPERIENCE} />
+      <ProjectSection projects={PROJECTS} />
     </main>
   );
 }

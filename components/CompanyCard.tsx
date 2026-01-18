@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Company } from "@/lib/types";
 import { LucideIcon } from "lucide-react";
 import clsx from "clsx";
@@ -21,26 +22,31 @@ export function CompanyCard({ company, style }: CompanyCardProps) {
         <motion.div
             style={style}
             className={clsx(
-                "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
-                "flex h-24 w-24 items-center justify-center rounded-2xl",
-                "glass-panel shadow-2xl backdrop-blur-xl",
-                "border border-white/10 bg-black/40"
+                // Base classes
+                "will-change-transform flex h-48 w-48 items-center justify-center rounded-2xl",
+                "glass-panel shadow-2xl backdrop-blur-xl border border-white/10 bg-black/40",
+                // Conditional Absolute Positioning:
+                // If style.position is relative (mobile), don't add absolute/centering classes.
+                // Otherwise (desktop/default), add absolute centering.
+                style?.position === 'relative'
+                    ? "relative"
+                    : "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
             )}
         >
-            <div className="flex flex-col items-center gap-2 text-center">
+            <div className="flex flex-col items-center gap-4 text-center">
                 {typeof company.logo !== "string" ? ( // If company.logo is a component (not a string)
-                    <Icon className="h-8 w-8 text-zinc-100" style={{ color: company.color }} />
+                    <Icon className="h-16 w-16 text-zinc-100" style={{ color: company.color }} />
                 ) : ( // If company.logo is a string (URL)
-                    <div className="relative h-8 w-8">
-                        <img
+                    <div className="relative h-16 w-16">
+                        <Image
                             src={company.logo as string}
                             alt={company.name}
-                            className="h-full w-full object-contain brightness-0 invert"
-                            style={{ filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.5))' }}
+                            fill
+                            className="object-contain"
                         />
                     </div>
                 )}
-                <span className="font-work-sans text-[10px] font-medium tracking-wide text-zinc-400">
+                <span className="font-work-sans text-sm font-medium tracking-wide text-zinc-400">
                     {company.name}
                 </span>
             </div>

@@ -2,8 +2,8 @@
 
 @theme {
   --color-brand-cyan: #22d3ee;
-  --color-brand-dark: #0a0a0a;
-  
+  --color-brand-dark: #0d0c0c;
+
   --font-outfit: var(--font-outfit);
   --font-work-sans: var(--font-work-sans);
 }
@@ -14,7 +14,16 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+@utility text-neon {
+  background: linear-gradient(to bottom right, #ffffff 30%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.3));
+}
+
 body {
   background-color: var(--color-brand-dark);
   color: #ededed;
+  overflow-x: hidden;
 }
